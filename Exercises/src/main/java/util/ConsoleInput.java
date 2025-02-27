@@ -14,10 +14,14 @@ public class ConsoleInput {
     public static boolean getYesNo(String prompt) {
 
         while (true) {
-            System.out.println(prompt + " [Y/n]");
+            System.out.print(prompt + " [Y/n] ");
             String input = sc.nextLine();
             switch (input.toLowerCase()) {
-                case "y", "yes", "" -> {
+                case ""-> {
+                    System.out.println("y");
+                    return true;
+                }
+                case "y", "yes" -> {
                     return true;
                 }
                 case "n", "no" -> {
@@ -26,5 +30,16 @@ public class ConsoleInput {
                 default -> System.out.println("Please choose an answer.");
             }
         }
+    }
+
+    /**
+     * Get a string from the user.
+     *
+     * @param prompt Message to be displayed.
+     * @return String of what the user typed in.
+     */
+    public static String getString(String prompt) {
+        System.out.print(prompt);
+        return sc.nextLine();
     }
 }
