@@ -8,7 +8,6 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
         // SET-UP:
         // OUR address information - we listen for messages here
         int myPort = 4444;
