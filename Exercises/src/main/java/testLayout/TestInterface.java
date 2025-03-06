@@ -2,8 +2,6 @@ package testLayout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 /*
 Text Field         Submit Btn
@@ -44,11 +42,15 @@ public class TestInterface {
 
         inputField = new JTextField(15);
         submitButton = new JButton("Append");
+        submitButton.addActionListener(_ -> {
+            appendText();
+        });
 
         textArea = new JTextArea(15, 7);
         textArea.setEditable(false);
 
         clearButton = new JButton("Clear All");
+        clearButton.addActionListener(_ -> textArea.setText(""));
 
         // Configuring panel
         mainPanel.add(inputField, getGridBagConstraints(0, 0, 3));
@@ -72,6 +74,15 @@ public class TestInterface {
         // Set the component's width to the supplied value (in columns)
         gbc.gridwidth = width;
         return gbc;
+    }
+
+    public void appendText() {
+        String text = inputField.getText();
+
+        if (text.isEmpty()) return;
+
+        textArea.append(text + "\n");
+        inputField.setText("");
     }
 
     public void start() {
