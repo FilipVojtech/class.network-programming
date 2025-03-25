@@ -48,6 +48,22 @@ public class MovieTCPServer {
                             }
                         }
                         break;
+                    case MovieUtilities.REMOVE:
+                        if (components.length != 2) break;
+
+                        int id;
+
+                        try {
+                            id = Integer.parseInt(components[1]);
+                        } catch (NumberFormatException e) {
+                            response = MovieUtilities.NON_NUMERIC;
+                            break;
+                        }
+
+                        if (movieManager.remove(id) != null) response = MovieUtilities.REMOVED;
+                        else response = MovieUtilities.NOT_FOUND;
+
+                        break;
                 }
 
                 out.println(response);
