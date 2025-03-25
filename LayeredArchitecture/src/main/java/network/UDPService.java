@@ -1,47 +1,57 @@
 package network;
 
+import java.io.IOException;
 import java.net.*;
 
 public class UDPService {
-    private final DatagramSocket socket;
-    private final InetAddress address;
+    private DatagramSocket socket;
+    private InetAddress destinationIP;
+    private InetAddress senderIP;
+    private int destPort;
+    private int senderPort;
 
     /**
      * Set network interactions for localhost
-     *
-     * @param port Port to attach to
      */
-    public UDPService(int port) throws PortUnavailable {
-        try {
-            address = InetAddress.getByName("localhost");
-        } catch (UnknownHostException e) {
-            throw new RuntimeException("Could not establish connection to localhost");
+    public UDPService(String destIP, int destPort, int senderPort) throws UnknownHostException {
+        this.destinationIP = InetAddress.getByName(destIP);
+        this.senderIP = InetAddress.getByName("localhost");
+        this.destPort = destPort;
+        this.senderPort = senderPort;
+    }
+
+    public void connect() throws SocketException {
+        if (socket != null && socket.isConnected()) {
+            throw new SocketException("Connection already established.");
         }
-
-        try {
-            socket = new DatagramSocket(port);
-        } catch (SocketException e) {
-            throw new PortUnavailable("Port " + port + " in unavailable.");
-        }
-
-    }
-
-    public UDPService(String host, int port) throws UnknownHostException, SocketException {
-        socket = new DatagramSocket(port);
-        address = InetAddress.getByName(host);
-    }
-
-    public void send(String message) {
-        byte[] payload = message.getBytes();
-        DatagramPacket packet = new DatagramPacket(payload, payload.length);
-    }
-
-    public void receive() {
-
+        socket = new DatagramSocket(senderPort);
+        System.out.println("Socket connected");
     }
 
     public void disconnect() {
-        if (!socket.isClosed())
+        if (socket != null && socket.isConnected()) {
             socket.close();
+        }
+        System.out.println("Socket disconnected");
     }
+
+    public void send(String message) throws IOException {
+        if (socket == null) {
+            throw new SocketException("Socket is not connected");
+        }
+        byte[] payload = message.getBytes();
+        DatagramPacket packet = new DatagramPacket(payload, payload.length, destinationIP, destPort);
+        socket.send(packet);
+    }
+
+    public String receive() throws IOException {
+        if (socket == null) {
+            throw new SocketException("Socket is not connected");
+        }
+        byte[] responsePayload = new byte[1024 * 64];
+        DatagramPacket reply = new DatagramPacket(responsePayload, responsePayload.length);
+        socket.receive(reply);
+        return new String(reply.getData(), 0, reply.getLength());
+    }
+
 }

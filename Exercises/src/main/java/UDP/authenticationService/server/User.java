@@ -1,4 +1,4 @@
-package authenticationService.server;
+package UDP.authenticationService.server;
 
 import lombok.*;
 

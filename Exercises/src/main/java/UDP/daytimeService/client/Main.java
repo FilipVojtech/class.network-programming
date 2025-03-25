@@ -1,4 +1,4 @@
-package echoService.client;
+package UDP.daytimeService.client;
 
 import util.ConsoleInput;
 
@@ -11,7 +11,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         // SET-UP:
         // OUR address information - we listen for messages here
-        int myPort = 4444;
+        int myPort = 5555;
 
         boolean isRunning = true;
         String shortestMessage = null;
@@ -26,15 +26,21 @@ public class Main {
 
                 // Destination address information - IP and port
                 InetAddress destinationIP = InetAddress.getByName("localhost");
-                int destinationPort = 7777;
+                int destinationPort = 9999;
 
                 // LOGIC:
                 // Message to be sent
-                if (!ConsoleInput.getYesNo("Do you want to send a message?")) {
+                if (!ConsoleInput.getYesNo("Do you want to get the current date and time?")) {
                     isRunning = false;
                     continue;
                 }
-                String message = "ECHO%%" + ConsoleInput.getString("Message: ");
+                String message = "DAYTIME";
+
+//                if (longestMessage == null) longestMessage = message;
+//                else if (message.length() > longestMessage.length()) longestMessage = message;
+//
+//                if (shortestMessage == null) shortestMessage = message;
+//                else if (message.length() < shortestMessage.length()) shortestMessage = message;
 
                 // TRANSMISSION:
                 // Condition the message for transmission
@@ -74,6 +80,6 @@ public class Main {
         System.out.println("Program shutting down...");
 //        System.out.println("Longest message sent: " + longestMessage);
 //        System.out.println("Shortest message sent: " + shortestMessage);
-        System.out.println("Client sent " + messagesSentCount + " message(s).");
+        System.out.println("Client sent " + messagesSentCount + " messages in total.");
     }
 }

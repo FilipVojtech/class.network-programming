@@ -1,4 +1,4 @@
-package daytimeService.client;
+package UDP.authenticationService.client;
 
 import util.ConsoleInput;
 
@@ -8,10 +8,9 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
         // SET-UP:
         // OUR address information - we listen for messages here
-        int myPort = 5555;
+        int myPort = 4444;
 
         boolean isRunning = true;
         String shortestMessage = null;
@@ -26,21 +25,29 @@ public class Main {
 
                 // Destination address information - IP and port
                 InetAddress destinationIP = InetAddress.getByName("localhost");
-                int destinationPort = 9999;
+                int destinationPort = 2121;
 
                 // LOGIC:
                 // Message to be sent
-                if (!ConsoleInput.getYesNo("Do you want to get the current date and time?")) {
-                    isRunning = false;
-                    continue;
-                }
-                String message = "DAYTIME";
+                String message;
+                {
+                    if (!ConsoleInput.getYesNo("Do you want to log in?")) {
+                        isRunning = false;
+                        continue;
+                    }
 
-//                if (longestMessage == null) longestMessage = message;
-//                else if (message.length() > longestMessage.length()) longestMessage = message;
-//
-//                if (shortestMessage == null) shortestMessage = message;
-//                else if (message.length() < shortestMessage.length()) shortestMessage = message;
+                    StringBuilder sb = new StringBuilder("AUTH%%");
+
+                    String username = ConsoleInput.getString("Username: ");
+                    String password = ConsoleInput.getString("Password: ");
+
+                    sb
+                            .append(username)
+                            .append("%%")
+                            .append(password);
+
+                    message = sb.toString();
+                }
 
                 // TRANSMISSION:
                 // Condition the message for transmission
@@ -61,10 +68,20 @@ public class Main {
                 mySocket.receive(incomingMessage);
                 // Get the data out of the packet
                 receivedMessage = incomingMessage.getData();
+                String response = new String(receivedMessage);
 
                 // LOGIC STAGE
                 // Display the data from the packet
-                System.out.println("Response received: " + new String(receivedMessage));
+//                System.out.println("Response received: " + response);
+
+                switch (response.trim()) {
+                    case "SUCCESS" -> {
+                        isRunning = false;
+                        System.out.println("You logged in in " + messagesSentCount + (messagesSentCount > 1 ? " tries" : " try"));
+                    }
+                    case "INCORRECT_CREDENTIALS" -> System.out.println("Incorrect credentials");
+                    case "BAD_REQUEST" -> System.out.println("Error occurred");
+                }
             } catch (UnknownHostException e) {
                 System.out.println("IP address is not recognised");
                 System.out.println(e.getMessage());
@@ -78,8 +95,5 @@ public class Main {
         }
 
         System.out.println("Program shutting down...");
-//        System.out.println("Longest message sent: " + longestMessage);
-//        System.out.println("Shortest message sent: " + shortestMessage);
-        System.out.println("Client sent " + messagesSentCount + " messages in total.");
     }
 }

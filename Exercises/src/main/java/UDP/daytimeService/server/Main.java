@@ -1,15 +1,16 @@
-package echoService.server;
+package UDP.daytimeService.server;
 
 import java.io.IOException;
 import java.net.*;
+import java.time.LocalDateTime;
 
 public class Main {
     public static void main(String[] args) {
         // Establish listening port
-        int port = 7777;
+        int port = 9999;
 
         boolean isRunning = true;
-        int packetsReceived = 0;
+        int messagesReceived = 0;
 
         while (isRunning) {
             // Create a window for server to access network
@@ -22,7 +23,7 @@ public class Main {
                 System.out.println("Waiting for packet....");
                 mySocket.receive(incomingPacket);
                 System.out.println("Packet received!");
-                packetsReceived++;
+                messagesReceived++;
 
                 // Extract sender information from received packet:
                 InetAddress clientIP = incomingPacket.getAddress();
@@ -31,23 +32,17 @@ public class Main {
                 // Extract data from received packet:
                 int len = incomingPacket.getLength();
                 String incomingMessage = new String(payload, 0, len);
-                String[] messageFragments = incomingMessage.split("%%");
 
                 // Create response message
                 String response = "";
-                switch (messageFragments[0].toLowerCase()) {
-                    case "echo" -> {
-                        if (messageFragments.length < 2) {
-                            response = "<No data>";
-                        } else {
-                            response = messageFragments[1];
-                        }
-                        System.out.println(clientIP.getHostAddress() + ": " + response);
+                switch (incomingMessage.toLowerCase()) {
+                    case "daytime" -> {
+                        response = LocalDateTime.now().toString();
                     }
                 }
 
                 // Display to screen:
-//                System.out.println(clientIP.getHostAddress() + ":" + clientPort + " -> " + incomingMessage);
+                System.out.println(clientIP.getHostAddress() + ":" + clientPort + " -> " + incomingMessage);
 
                 // TRANSMISSION:
                 // Create a reply message
@@ -70,7 +65,7 @@ public class Main {
             System.out.println();
         }
 
-        System.out.println("The server has received " + packetsReceived + " messages in total.");
+        System.out.println("The server has received " + messagesReceived + " messages in total.");
         System.out.println("Server shutting down...");
     }
 }
