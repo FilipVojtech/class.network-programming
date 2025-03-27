@@ -14,6 +14,9 @@ public class MovieTCPServer {
 
             MovieManager movieManager = new MovieManager();
 
+            movieManager.add("The Room", 2003, "Drama");
+            movieManager.add("Shrek", 2001, "Comedy");
+
             while (true) {
                 Socket clientDataSocket = connectionSocket.accept();
                 // Set up streams to communicate
@@ -63,6 +66,23 @@ public class MovieTCPServer {
                         if (movieManager.remove(id) != null) response = MovieUtilities.REMOVED;
                         else response = MovieUtilities.NOT_FOUND;
 
+                        break;
+                    case MovieUtilities.LIST:
+                        if (movieManager.isEmpty()) {
+                            response = MovieUtilities.NO_MOVIES_FOUND;
+                            break;
+                        }
+
+                        StringBuilder sb = new StringBuilder();
+                        for (var movie : movieManager.getAll()) {
+                            sb
+                                    .append(movie.getId()).append(MovieUtilities.DELIMITER)
+                                    .append(movie.getName()).append(MovieUtilities.DELIMITER)
+                                    .append(movie.getYear()).append(MovieUtilities.DELIMITER)
+                                    .append(movie.getGenre());
+                            sb.append(MovieUtilities.SUB_DELIMITER);
+                        }
+                        response = sb.substring(0, sb.length() - MovieUtilities.SUB_DELIMITER.length());
                         break;
                 }
 

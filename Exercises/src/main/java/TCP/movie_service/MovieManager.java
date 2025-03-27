@@ -31,4 +31,14 @@ public class MovieManager {
 
         return movies.remove(movieId);
     }
+
+    public Movie[] getAll() {
+        Movie[] movieArray = new Movie[movies.size()];
+        movies.values().toArray(movieArray);
+        return movieArray;
+    }
+
+    public boolean isEmpty() {
+        return movies.isEmpty();
+    }
 }
