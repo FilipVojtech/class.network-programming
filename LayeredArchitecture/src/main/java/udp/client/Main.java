@@ -1,6 +1,6 @@
-package client;
+package udp.client;
 
-import network.UDPService;
+import udp.network.UDPService;
 
 public class Main {
     private static UDPService network;

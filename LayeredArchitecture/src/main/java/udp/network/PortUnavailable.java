@@ -1,4 +1,4 @@
-package network;
+package udp.network;
 
 public class PortUnavailable extends Exception {
     public PortUnavailable() {
