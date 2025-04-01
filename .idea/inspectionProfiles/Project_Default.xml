@@ -1,0 +1,11 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="AddConversionCallMigration" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="CyclicJobDependency" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="IllegalJobDependency" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="IndexOfReplaceableByContains" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="SpringInactiveProfileHighlightingInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="UndefinedParamsPresent" enabled="true" level="WARNING" enabled_by_default="true" />
+  </profile>
+</component>

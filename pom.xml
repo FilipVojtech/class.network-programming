@@ -11,6 +11,7 @@
     <modules>
         <module>Exercises</module>
         <module>LayeredArchitecture</module>
+        <module>ExamUDP</module>
     </modules>
 
     <properties>
