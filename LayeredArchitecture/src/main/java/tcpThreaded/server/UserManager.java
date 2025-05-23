@@ -1,9 +1,9 @@
-package tcp.server;
+package tcpThreaded.server;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import tcp.business.User;
+import tcpThreaded.business.User;
 
 import java.util.HashMap;
 import java.util.Map;

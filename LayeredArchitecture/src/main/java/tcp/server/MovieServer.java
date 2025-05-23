@@ -31,13 +31,8 @@ public class MovieServer {
 
                 switch (components[0]) {
                     case LOGIN -> {
-                        if (components.length != 3) break;
-
-                        User u = users.getUser(components[1]);
-                        if (u.getPassword().equals(components[2])) {
-                            sessionUser = u;
-                            response = SUCCESS;
-                        } else response = INVALID_LOGIN;
+                        var result = handleLogin(components, users);
+                        if (result != null) response = result;
                     }
                     case LOGOUT -> {
                         if (sessionUser != null)
@@ -61,5 +56,15 @@ public class MovieServer {
                 network.send(response);
             }
         }
+    }
+
+    private static String handleLogin(String[] components, UserManager userManager) {
+        if (components.length != 3) return null;
+
+        User u = userManager.getUser(components[1]);
+        if (u.getPassword().equals(components[2])) {
+            userManager.setCurrentUser(u);
+            return SUCCESS;
+        } else return INVALID_LOGIN;
     }
 }
